@@ -4,10 +4,9 @@ import csv
 from datetime import date
 
 from reportlab.platypus import SimpleDocTemplate
-from reportlab.platypus import Paragraph, Spacer, Table, Image
+from reportlab.platypus import Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet
-from reportlab.lib import colors
-
+from run import fruits_dict
 """
 Creates PDF report
 """
@@ -34,6 +33,7 @@ for line in table_data:
     print_text += "weight: "+str(line[1]) + "<br/>" + "<br/>"
 print(print_text)
 
+
 def generate(filename, title, data):
   styles = getSampleStyleSheet()
   report = SimpleDocTemplate(filename)
@@ -43,7 +43,7 @@ def generate(filename, title, data):
   report.build([report_title, empty_line, report_info, empty_line])
 
 today = date.today().strftime("%d/%m/%Y") # dd/mm/YY
-path = '/mnt/c/users/geomaedhros/code_test/g_autom/test_report/processed.pdf'
+path = '/tmp/processed.pdf'
 
 report_title = "Processed Update on {}".format(today)
 generate(path, report_title, print_text)
