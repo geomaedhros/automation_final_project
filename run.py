@@ -87,12 +87,9 @@ def main(argv):
 
     sender =  "automation@example.com"
     receiver = "{}@example.com".format(os.environ.get('USER'))
-    subject = title
-    body = ""
-    for line in table_data:
-        body += "name: "+str(line[1]) + "\n"
-        body += "weight: "+str(line[1]) + "\n\n"
-  
+    subject = "Upload Completed - Online Fruit Store"
+    body =  "All fruits are uploaded to our website successfully. A detailed list is attached to this email."
+
     message = report_email.generate(sender, receiver, subject, body, attachment)
     report_email.send_email(message)
 
