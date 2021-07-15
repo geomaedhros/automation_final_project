@@ -1,9 +1,14 @@
 #!/usr/bin/env python3
 
 import os
+from types import DynamicClassAttribute
 import requests
 import re
 import json
+import sys
+import reports 
+import report_email
+from datetime import date
 
 
 """
@@ -44,7 +49,7 @@ def create_json_dict(in_path):
                     fruits_dict["image_name"] = image_name
 
                     # iterate through json_dict and upload JSON file to url
-                    json_data = json.dumps(fruits_dict)
+                    json_data = json.dump(fruits_dict) # vs. .dumps - creates JSON type
                     r = requests.post(out_url, json=json_data)
                     print(json_data)
                     print(r)
@@ -57,4 +62,39 @@ def create_json_dict(in_path):
 
 create_json_dict(in_dir)
 
-print("JSON dict successfully exported")
+
+def main(argv):
+    """Process the JSON data, generate a full report out of it and send it via mail."""
+    
+    # creates report 
+    today = date.today().strftime("%d/%m/%Y") # dd/mm/YY
+    attachment = '/tmp/processed.pdf'
+    title = "Processed Update on {}".format(today)
+
+    #Turns the data in dict into a list of lists.
+    table_data = [["name", "weight"]]
+    for keys, values in dict.fruits_items():
+        table_data.append([keys, values])
+
+    paragraph = ""
+    for line in table_data:
+        paragraph += "name: "+str(line[1]) + "<br/>"
+        paragraph += "weight: "+str(line[1]) + "<br/>" + "<br/>"
+    
+    reports.generate_report(attachment, title, paragraph)
+
+    # send the PDF report as an email attachment
+
+    sender =  "automation@example.com"
+    receiver = "{}@example.com".format(os.environ.get('USER'))
+    subject = title
+    body = ""
+    for line in table_data:
+        body += "name: "+str(line[1]) + "\n"
+        body += "weight: "+str(line[1]) + "\n\n"
+  
+    message = report_email.generate(sender, receiver, subject, body, attachment)
+    report_email.send_email(message)
+
+if __name__ == "__main__":
+    main(sys.argv)
