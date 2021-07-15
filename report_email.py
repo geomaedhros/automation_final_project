@@ -25,7 +25,7 @@ def generate_email(sender, recipient, subject, body, attachment_path):
                           subtype=mime_subtype,
                           filename=attachment_filename)
 
-  return message
+    return message
 
 def send_email(message):
       """Sends the message to the configured SMTP server."""
