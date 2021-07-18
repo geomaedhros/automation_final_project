@@ -4,7 +4,7 @@ import os
 import shutil
 import psutil
 import socket
-from sol_email import generate_error_report, send_email
+from emails import generate_error_report, send_email
 
 def check_cpu_usage():
     """Verifies that there's enough unused CPU"""

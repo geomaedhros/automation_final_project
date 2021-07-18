@@ -27,3 +27,4 @@ for item in list:
     if resp.status_code != 201:
         raise Exception('POST error status={}'.format(resp.status_code))
     print('Created feedback ID: {}'.format(resp.json()["id"]))
+    print(list)
